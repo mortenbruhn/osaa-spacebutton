@@ -14,10 +14,10 @@
 #define PAYLOAD_OPEN    "sensors=%7B%22state%22%3A%7B%22open%22%3Atrue%7D%7D&key=qCUlkiJTqzI3ClxguW2v.etqpOUwi85djis7p.Vicg3a8vjPfCcEG"
 #define PAYLOAD_CLOSE   "sensors=%7B%22state%22%3A%7B%22open%22%3Afalse%7D%7D&key=qCUlkiJTqzI3ClxguW2v.etqpOUwi85djis7p.Vicg3a8vjPfCcEG"
 
-#define RED_PIN     D1
-#define GREEN_PIN   D2
-#define YELLOW_PIN  D3
-#define BUTTON_PIN  D5
+#define RED_PIN     D7
+#define YELLOW_PIN  D6
+#define GREEN_PIN   D5
+#define BUTTON_PIN  D8
 #define PIN_ON      HIGH
 #define PIN_OFF     LOW
 

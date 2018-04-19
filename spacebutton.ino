@@ -23,7 +23,7 @@ void setup() {
   pinMode(GREEN_PIN, OUTPUT);
   pinMode(RED_PIN, OUTPUT);
   pinMode(YELLOW_PIN, OUTPUT);
-  pinMode(BUTTON_PIN, INPUT_PULLUP); 
+  pinMode(BUTTON_PIN, INPUT); 
 
   WiFi.mode(WIFI_STA);
   WiFiMulti.addAP(WIFI_SSID, WIFI_PASS);
@@ -118,6 +118,8 @@ space_status_t getSpaceStatus() {
 }
 
 void buttonPushed() {
+  Serial.println("Button pushed");
+
   toggleOpenStatus();
 }
 
@@ -127,7 +129,7 @@ void loop() {
     lastKnownStatus = getSpaceStatus();
   }
   int currentRead = digitalRead(BUTTON_PIN);
-  accumulated += (currentRead > 0 ? -1 : 1);
+  accumulated += (currentRead > 0 ? 1 : -1);
   accumulated = (accumulated < 0 ? 0 : accumulated);
   if (accumulated >= DEBOUNCE_COUNT) {
     buttonPushed();
