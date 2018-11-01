@@ -15,21 +15,25 @@ space_status_t lastKnownStatus = STATUS_UNDEFINED;
 int currentRead;
 int accumulated = 0;
 int pullStatusCounter = 0;
+int resetCounter = 0;
 
 void setup() {
-  Serial.begin(9600);
-  while (!Serial) continue;
 
   pinMode(GREEN_PIN, OUTPUT);
   pinMode(RED_PIN, OUTPUT);
   pinMode(YELLOW_PIN, OUTPUT);
   pinMode(BUTTON_PIN, INPUT); 
+  setAllPins(true);
+
+  Serial.begin(9600);
+  while (!Serial) continue;
 
   WiFi.mode(WIFI_STA);
   WiFiMulti.addAP(WIFI_SSID, WIFI_PASS);
 
   // allow reuse (if server supports it)
-  http.setReuse(true);  
+  http.setReuse(true); 
+  setAllPins(false);
 }
 
 void setPin(pinout_t pin, bool output) {
@@ -44,6 +48,27 @@ void setPins(bool green, bool red, bool yellow) {
 
 void setAllPins(bool all) {
   setPins(all,all,all);
+}
+
+void flashLedsAndReset() {
+  Serial.println("Resetting due to lack of connectivity");
+  bool ledsOn = false;
+  for (int counter = 0; counter < 2 * FLASH_LEDS_N_TIMES_BEFORE_RESET; counter++) {
+    setAllPins(ledsOn = !ledsOn);
+    delay(FLASH_LEDS_INTERVAL_IN_MS);
+  }
+  // Note: First restart after flash will fail. See:
+  // https://github.com/esp8266/Arduino/issues/1722
+  ESP.restart();
+}
+
+void handleNotConnected() {
+  if (++resetCounter >= NUMBER_OF_TRIES_BEFORE_RESET) {
+    flashLedsAndReset();
+  } else {
+      Serial.print("Reset counter is now ");
+      Serial.println(resetCounter);
+  }
 }
 
 void sendStatusUpdate(space_status_t st) {
@@ -107,13 +132,15 @@ space_status_t getSpaceStatus() {
         StaticJsonBuffer<MAX_JSON_RESPONSE_SIZE> jsonBuffer;
         bool state_open = (jsonBuffer.parseObject(http.getStream()))["state"]["open"];
         result = (state_open ? STATUS_OPEN : STATUS_CLOSED);
-        setPin(YELLOW_PIN, false);
         setPin(GREEN_PIN, state_open);
         setPin(RED_PIN, !state_open);
       } 
     }
     http.end();
+    setPin(YELLOW_PIN, false);
     return result;
+  } else {
+    handleNotConnected();
   }
 }
 

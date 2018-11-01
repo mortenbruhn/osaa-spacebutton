@@ -11,6 +11,8 @@ bool readPin(pinout_t pin);
 void setPin(pinout_t pin, bool output);
 void setPins(bool green, bool red, bool yellow);
 void setAllPins(bool all);
+void flashLedsAndReset();
+void handleNotConnected();
 void setOpenStatus(space_status_t spaceStatus);
 void togglePin(pinout_t pin);
 
