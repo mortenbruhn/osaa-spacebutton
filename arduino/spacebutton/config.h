@@ -17,7 +17,7 @@
 #define RED_PIN     D7
 #define YELLOW_PIN  D6
 #define GREEN_PIN   D5
-#define BUTTON_PIN  D8
+#define BUTTON_PIN  15
 #define PIN_ON      HIGH
 #define PIN_OFF     LOW
 
