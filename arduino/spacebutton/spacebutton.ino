@@ -157,7 +157,7 @@ space_status_t getSpaceStatus() {
 }
 
 void buttonPushed() {
-  Serial.println("Button pushed");
+  Serial.println("===== BUTTON PUSHED =====");
 
   toggleOpenStatus();
 }
