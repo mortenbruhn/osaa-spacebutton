@@ -37,10 +37,10 @@ void setup() {
 }
 
 void setPin(pinout_t pin, bool output) {
-  Serial.print("pin ");
-  Serial.print(pin);
-  Serial.print(" state ");
-  Serial.println(output);
+  //Serial.print("pin ");
+  //Serial.print(pin);
+  //Serial.print(" state ");
+  //Serial.println(output);
   digitalWrite(pin, (output ? PIN_ON : PIN_OFF));
 }
 
@@ -127,6 +127,7 @@ space_status_t getSpaceStatus() {
   space_status_t result = STATUS_UNDEFINED;
   setPin(YELLOW_PIN, true);
   if((WiFiMulti.run() == WL_CONNECTED)) {
+    http.useHTTP10(true);
     http.begin(ENDPOINT_GET_URL);
     Serial.println("Trying to fetch status");
     int httpStatus = http.GET();
@@ -136,9 +137,14 @@ space_status_t getSpaceStatus() {
       if(httpStatus == HTTP_CODE_OK) {
         StaticJsonBuffer<MAX_JSON_RESPONSE_SIZE> jsonBuffer;
         //Serial.println("raw JSON was:");
-        //jsonBuffer.parse(http.getStream()).prettyPrintTo(Serial);
-        bool state_open = (jsonBuffer.parseObject(http.getStream()))["state"]["open"];
+        JsonObject& root = jsonBuffer.parseObject(http.getStream());
+        //root.prettyPrintTo(Serial);
+        bool state_open = root["state"]["open"].as<bool>();
         result = (state_open ? STATUS_OPEN : STATUS_CLOSED);
+        Serial.print("Space state is now: ");
+        Serial.println(state_open ? "Open " : "Closed ");
+        //Serial.print("Max response buffer size: ");
+        //Serial.print(MAX_JSON_RESPONSE_SIZE);        
         setPin(GREEN_PIN, state_open);
         setPin(RED_PIN, !state_open);
       } 

@@ -1,11 +1,11 @@
 #ifndef SPACEBUTTON_CONFIG
 
-#define WIFI_SSID "osaa-g"
+#define WIFI_SSID "osaa-iot"
 #define WIFI_PASS "deadbeef42"
 #define ENDPOINT_SET_URL "http://spaceapi.osaa.dk/sensor/set"
 #define ENDPOINT_GET_URL "http://spaceapi.osaa.dk/status/json"
 /* Calculated by using http://arduinojson.org/assistant/ on http://spaceapi.osaa.dk/status/json */
-#define MAX_JSON_RESPONSE_SIZE (2*JSON_ARRAY_SIZE(1) + 2*JSON_OBJECT_SIZE(1) + JSON_OBJECT_SIZE(3) + JSON_OBJECT_SIZE(5) + JSON_OBJECT_SIZE(11) + 560)
+#define MAX_JSON_RESPONSE_SIZE 2048
 #define PULL_WAIT_MS 2000
 #define BUTTON_POLL_MS 10
 #define DEBOUNCE_COUNT 8
