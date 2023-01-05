@@ -14,14 +14,18 @@
 #define PAYLOAD_OPEN    "sensors=%7B%22state%22%3A%7B%22open%22%3Atrue%7D%7D&key=qCUlkiJTqzI3ClxguW2v.etqpOUwi85djis7p.Vicg3a8vjPfCcEG"
 #define PAYLOAD_CLOSE   "sensors=%7B%22state%22%3A%7B%22open%22%3Afalse%7D%7D&key=qCUlkiJTqzI3ClxguW2v.etqpOUwi85djis7p.Vicg3a8vjPfCcEG"
 
-#define RED_PIN     D7
-#define YELLOW_PIN  D6
-#define GREEN_PIN   D5
-#define BUTTON_PIN  D8
-#define PIN_ON      HIGH
-#define PIN_OFF     LOW
+#define RED_PIN     13
+#define YELLOW_PIN  12
+#define GREEN_PIN   14
+#define BUTTON_PIN  15
+//#define RED_PIN     D7
+//#define YELLOW_PIN  D6
+//#define GREEN_PIN   D5
+//#define BUTTON_PIN  D8
+#define PIN_ON      1
+#define PIN_OFF     0
 
-#define NUMBER_OF_TRIES_BEFORE_RESET 10
+#define NUMBER_OF_TRIES_BEFORE_RESET 100000
 #define FLASH_LEDS_N_TIMES_BEFORE_RESET 5
 #define FLASH_LEDS_INTERVAL_IN_MS 700
 

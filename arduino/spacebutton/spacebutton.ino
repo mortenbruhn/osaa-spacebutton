@@ -37,6 +37,10 @@ void setup() {
 }
 
 void setPin(pinout_t pin, bool output) {
+  Serial.print("pin ");
+  Serial.print(pin);
+  Serial.print(" state ");
+  Serial.println(output);
   digitalWrite(pin, (output ? PIN_ON : PIN_OFF));
 }
 
@@ -124,12 +128,15 @@ space_status_t getSpaceStatus() {
   setPin(YELLOW_PIN, true);
   if((WiFiMulti.run() == WL_CONNECTED)) {
     http.begin(ENDPOINT_GET_URL);
+    Serial.println("Trying to fetch status");
     int httpStatus = http.GET();
     if(httpStatus > 0) {
       Serial.print("Got response with HTTP status ");
       Serial.println(httpStatus);
       if(httpStatus == HTTP_CODE_OK) {
         StaticJsonBuffer<MAX_JSON_RESPONSE_SIZE> jsonBuffer;
+        //Serial.println("raw JSON was:");
+        //jsonBuffer.parse(http.getStream()).prettyPrintTo(Serial);
         bool state_open = (jsonBuffer.parseObject(http.getStream()))["state"]["open"];
         result = (state_open ? STATUS_OPEN : STATUS_CLOSED);
         setPin(GREEN_PIN, state_open);
@@ -157,6 +164,7 @@ void loop() {
   }
   int currentRead = digitalRead(BUTTON_PIN);
   accumulated += (currentRead > 0 ? 1 : -1);
+//  accumulated += (currentRead > 0 ? -1 : 1);
   accumulated = (accumulated < 0 ? 0 : accumulated);
   if (accumulated >= DEBOUNCE_COUNT) {
     buttonPushed();
